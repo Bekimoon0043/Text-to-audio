@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amharic TTS</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 50px auto; padding: 20px; }
+        textarea { width: 100%; height: 100px; margin-bottom: 10px; }
+        select, button { padding: 10px; margin-right: 10px; }
+        audio { margin-top: 20px; width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Amharic Text-to-Speech</h1>
+    <textarea id="text" placeholder="Enter text here...">ሰላም ዓለም</textarea>
+    <br>
+    <label for="lang">Language:</label>
+    <select id="lang">
+        <option value="am" selected>Amharic</option>
+        <option value="en">English</option>
+        <!-- Add more languages if needed -->
+    </select>
+    <button onclick="speak()">Speak</button>
+    <audio id="audio" controls></audio>
+
+    <script>
+        function speak() {
+            const text = document.getElementById('text').value;
+            const lang = document.getElementById('lang').value;
+
+            fetch('/api/tts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text, lang })
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                const audio = document.getElementById('audio');
+                audio.src = url;
+                audio.play();
+            })
+            .catch(err => console.error(err));
+        }
+    </script>
+</body>
+</html>
