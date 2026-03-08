@@ -1,0 +1,5 @@
+services:
+  - type: web
+    name: video-translate-api
+    env: docker
+    plan: free
